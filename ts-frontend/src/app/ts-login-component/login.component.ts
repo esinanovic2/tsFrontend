@@ -3,10 +3,10 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 
 @Component({
   selector: 'app-ts-login-component',
-  templateUrl: './ts-login-component.component.html',
-  styleUrls: ['./ts-login-component.component.css']
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
-export class TsLoginComponentComponent implements OnInit {
+export class LoginComponent implements OnInit {
   signInForm: FormGroup;
   constructor() { }
 
