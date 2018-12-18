@@ -5,12 +5,17 @@
     </div>
     <ul class="nav navbar-nav">
       <ng-template [ngIf] = "authService.isAuthenticated()">
-        <li routerLinkActive="active"><a [routerLink]="['home']">Home</a></li>
-        <li routerLinkActive="active"><a [routerLink]="['users']">Users</a></li>
+        <li routerLinkActive="active"><a routerLink="/home">Home</a></li>
+        <li routerLinkActive="active"><a routerLink="/users">Users</a></li>
+        <li routerLinkActive="active"><a routerLink="/groups">Groups</a></li>
       </ng-template>
     </ul>
     <ul class="nav navbar-nav navbar-right">
+      <li style="cursor: pointer;" (click)="authService.logout()" *ngIf = "authService.isAuthenticated()"><a routerLink="/logout">Logout</a></li>
+      <ng-template [ngIf] = "!authService.isAuthenticated()">
       <li routerLinkActive="active"><a routerLink="/login">Login</a></li>
+      <li routerLinkActive="active"><a routerLink="/register">Register</a></li>
+      </ng-template>
     </ul>
   </div>
 </nav>
