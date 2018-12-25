@@ -2,17 +2,15 @@ import { Injectable } from '@angular/core';
 import {User} from './user.model';
 import {Subject} from 'rxjs';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable()
 export class UsersService {
   usersChanged = new Subject<User[]>();
 
   private users: User[] = [
-    new User(1, 'Elvedin', 'Sinanovic', 'elva', 1, 1, 1),
-    new User(2, 'Ervin', 'Beus', 'ervin', 1, 1, 2),
-    new User(3, 'Ena', 'Muratspahic', 'fly', 1, 1, 3),
-    new User(3, 'Obicni', 'Obicnjak', 'obicni', 2, 2, 4),
+    new User(1, 'Elvedin', 'Sinanovic', 'elva', '', 'elva@elva.com', 1, 1, 1),
+    new User(2, 'Ervin', 'Beus', 'ervin', '', 'ervin@ervin.com', 1, 1, 2),
+    new User(3, 'Ena', 'Muratspahic', 'fly', '', 'ena@ena.com', 1, 1, 3),
+    new User(3, 'Obicni', 'Obicnjak', 'obicni', '', 'obicni@obicni.com', 2, 2, 4),
   ];
 
   constructor() { }
@@ -33,6 +31,15 @@ export class UsersService {
 
   setUsers(users: User[]) {
     this.users = users;
+    this.usersChanged.next(this.users.slice());
+  }
+
+  getUser(id: number) {
+    return this.users[id];
+  }
+
+  deleteUser(id: number) {
+    this.users.splice(id, 1);
     this.usersChanged.next(this.users.slice());
   }
 }

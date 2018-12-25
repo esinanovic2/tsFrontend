@@ -16,16 +16,14 @@ import {GroupEditComponent} from './groups/group-edit/group-edit.component';
 const appRoutes: Routes = [
   {path: '', redirectTo: '/home', pathMatch: 'full'},
   {path: 'home', component: HomeComponent},
-  {path: 'users', component: UsersListComponent, canActivate: [RoleGuardService], data: { expectedRole: ['admin', 'user']},
-    children: [
-      {path: ':id', component: UserComponent, canActivate: [RoleGuardService],
-        data: { expectedRole: ['admin', 'user']} },
-      {path: ':id/edit', component: UserEditComponent, canActivate: [RoleGuardService],
-        data: { expectedRole: ['admin', 'user']} },
-    ]},
+  {path: 'users', component: UsersListComponent, canActivate: [RoleGuardService], data: { expectedRole: ['admin', 'user']}},
+  {path: 'users/:id', component: UserComponent, canActivate: [RoleGuardService], data: { expectedRole: ['admin', 'user']} },
+  {path: 'users/:id/edit', component: UserEditComponent, canActivate: [RoleGuardService], data: { expectedRole: ['admin', 'user']} },
   {path: 'groups', component: GroupListComponent, canActivate: [RoleGuardService], data: { expectedRole: ['admin']},
     children: [
       {path: ':id', component: GroupComponent, canActivate: [RoleGuardService],
+        data: { expectedRole: ['admin']} },
+      {path: ':id/users', component: UsersListComponent, canActivate: [RoleGuardService],
         data: { expectedRole: ['admin']} },
       {path: ':id/edit', component: GroupEditComponent, canActivate: [RoleGuardService],
         data: { expectedRole: ['admin']} },

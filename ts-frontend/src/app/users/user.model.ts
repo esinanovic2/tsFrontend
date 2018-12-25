@@ -3,17 +3,21 @@ export  class User {
   public firstName: string;
   public lastName: string;
   public username: string;
+  public password: string;
+  public email: string;
   public userTypeId: number;
   public userGroupId: number;
   public deviceId: number;
 
 
-  constructor(id: number, firstName: string, lastName: string, username: string,
+  constructor(id: number, firstName: string, lastName: string, username: string, password: string, email: string,
               userTypeId: number, userGroupId: number, deviceId: number) {
     this.id = id;
     this.firstName = firstName;
     this.lastName = lastName;
     this.username = username;
+    this.password = password;
+    this.email = email;
     this.userTypeId = userTypeId;
     this.userGroupId = userGroupId;
     this.deviceId = deviceId;

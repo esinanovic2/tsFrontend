@@ -1,3 +1,14 @@
-<p>
-  users-list works!
-</p>
+<div class="row">
+  <div class="pull-right" style="padding: 5px; padding-right: 15px">
+    <button type="button" class="btn btn-success" (click)="onAddUser()">Add User</button>
+  </div>
+</div>
+<div class="row">
+  <div class="col-xs-12">
+    <app-user-item
+      *ngFor="let userElement of users; let i=index"
+      [user]="userElement"
+      [index]="i"
+    ></app-user-item>
+  </div>
+</div>

@@ -32,9 +32,7 @@
                 Password Invalid</span>
             </span>
         </div>
-        <span *ngIf="!signInForm.valid && signInForm.touched"
-              class="help-block" style="color: red">Please enter valid data</span>
-        <button class="btn btn-primary" type="submit">Login</button>
+        <button class="btn btn-primary" type="submit" [disabled]="!signInForm.valid">Login</button>
       </form>
     </div>
   </div>

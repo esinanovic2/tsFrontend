@@ -19,6 +19,9 @@ import { GroupListComponent } from './groups/group-list/group-list.component';
 import { GroupItemComponent } from './groups/group-item/group-item.component';
 import { GroupEditComponent } from './groups/group-edit/group-edit.component';
 import { GroupComponent } from './groups/group/group.component';
+import {UsersService} from './users/users.service';
+import {RoleGuardService} from './auth/role-guard.service';
+import { DropdownDirective } from './shared/dropdown.directive';
 
 @NgModule({
   declarations: [
@@ -36,6 +39,7 @@ import { GroupComponent } from './groups/group/group.component';
     GroupItemComponent,
     GroupEditComponent,
     GroupComponent,
+    DropdownDirective,
   ],
   imports: [
     BrowserModule,
@@ -43,7 +47,7 @@ import { GroupComponent } from './groups/group/group.component';
     AppRoutingModule,
     FormsModule
   ],
-  providers: [AuthService, AuthGuardService],
+  providers: [AuthService, AuthGuardService, UsersService, RoleGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,3 +1,17 @@
-<p>
-  user-item works!
-</p>
+<a style="cursor: pointer"
+   class="list-group-item clearfix">
+  <div class="pull-left">
+    <h4 class="list-group-item-heading">{{user.firstName + ' ' + user.lastName }}</h4>
+    <p class="list-group-item-text">{{'Group : ' + userGroup}}</p>
+    <p class="list-group-item-text">{{'Type : ' + userType}}</p>
+  </div>
+  <div class="pull-right">
+    <div class="row">
+        <div class="col-xs-12">
+          <button class="btn btn-primary btn-block" type="button" (click)="onDetails()">Details</button>
+          <button class="btn btn-primary btn-block" type="button" (click)="onEdit()">Edit</button>
+          <button class="btn btn-danger btn-block"  type="button" (click)="onDelete()" >Delete</button>
+        </div>
+      </div>
+  </div>
+</a>
