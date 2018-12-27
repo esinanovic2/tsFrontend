@@ -8,6 +8,7 @@ import {decode} from 'punycode';
   providedIn: 'root'
 })
 export class RoleGuardService implements CanActivate {
+   token = {'role': ''};
 
   constructor(public authService: AuthService, public router: Router) {}
 
@@ -17,16 +18,16 @@ export class RoleGuardService implements CanActivate {
     // on the data property
     const expectedRole = route.data.expectedRole;
 
-    // const token = localStorage.getItem('token');
-    const token = {'role': 'admin'};
-    console.log(token.role);
+    // this.token = localStorage.getItem('token');
+    this.token = {'role': 'admin'};
+    console.log(this.token.role);
     console.log(expectedRole[0] + '  -  ' + expectedRole[1]);
 
 
     // decode the token to get its payload - when we implement tokens
     // const tokenPayload = decode(token);
 
-    if (this.authService.isAuthenticated() && (token.role === expectedRole[0] || token.role === expectedRole[1])) {
+    if (this.authService.isAuthenticated() && (this.token.role === expectedRole[0] || this.token.role === expectedRole[1])) {
       return true;
     }
     this.router.navigate(['login']);

@@ -1,0 +1,10 @@
+<div class="row">
+  <div class="col-xs-12">
+    <span *ngIf="users.length <=0 "> This group has no users! </span>
+    <app-group-user-item
+      *ngFor="let userElement of users; let i=index"
+      [user]="userElement"
+      [index]="i"
+    ></app-group-user-item>
+  </div>
+</div>

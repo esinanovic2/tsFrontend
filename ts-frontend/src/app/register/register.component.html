@@ -33,10 +33,9 @@
             <span *ngIf="registerForm.get('lastName').errors['lastNameInvalid']">
                 Last name is invalid</span>
           </span>
-
         </div>
 
-        <div class="form-group">
+        <div class="form-group" *ngIf="!editMode || (editMode && role=='user')">
           <label for="username">Username</label>
           <input
             type="text"
@@ -48,12 +47,12 @@
                 class="help-block" style="color: red">
             <span *ngIf="registerForm.get('username').errors['required']">
                 This field is required</span>
-            <span *ngIf="registerForm.get('username').errors['usernameInvalid']">
-                Username Invalid</span>
+            <span *ngIf="registerForm.get('username').errors['usernameMustBeUnique']">
+                Username must be unique</span>
           </span>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" *ngIf="!editMode || (editMode && role=='user')">
           <label for="email">Email</label>
           <input
             type="email"
@@ -70,7 +69,7 @@
           </span>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" *ngIf="!editMode || (editMode && role=='user')">
           <label for="password">Password</label>
           <input
             type="password"
@@ -87,23 +86,7 @@
           </span>
         </div>
 
-        <div class="form-group">
-          <label for="repeatPassword">Repeat Password</label>
-          <input
-            type="password"
-            id="repeatPassword"
-            formControlName="repeatPassword"
-            class="form-control">
-          <span *ngIf="!registerForm.get('repeatPassword').valid && registerForm.get('repeatPassword').touched"
-                class="help-block" style="color: red">
-            <span *ngIf="registerForm.get('repeatPassword').errors['required']">
-                  This field is required</span>
-            <span *ngIf="registerForm.get('repeatPassword').errors['repeatPasswordInvalid']">
-                  Passwords do not match</span>
-          </span>
-        </div>
-
-        <div class="form-group">
+        <div class="form-group" *ngIf="!editMode || (editMode && role=='admin')">
           <label for="userTypeId">User Type</label>
           <select
             id="userTypeId"
@@ -113,7 +96,7 @@
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" *ngIf="!editMode || (editMode && role=='admin')">
           <label for="userGroupId">Group</label>
           <select
             id="userGroupId"
@@ -123,7 +106,7 @@
           </select>
         </div>
 
-        <button class="btn btn-primary" type="submit" [disabled]="!registerForm.valid">Register</button>
+        <button class="btn btn-primary" type="submit" [disabled]="!registerForm.valid">{{editMode ?  'Update' : 'Add'}}</button>
       </form>
     </div>
   </div>

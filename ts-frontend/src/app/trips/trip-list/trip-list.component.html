@@ -1,0 +1,9 @@
+<div class="row">
+  <div class="col-xs-12">
+    <app-trip-list-item
+      *ngFor="let tripElement of trips; let i=index"
+      [trip]="tripElement"
+      [index]="i"
+    ></app-trip-list-item>
+  </div>
+</div>

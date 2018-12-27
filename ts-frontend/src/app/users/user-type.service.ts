@@ -26,7 +26,11 @@ export class UserTypeService {
   }
 
   getUserType(id: number) {
-    return this.userTypes[id];
+    for (let i = 0; i < this.userTypes.length; i++) {
+      if (this.userTypes[i].id === id) {
+        return this.userTypes[i];
+      }
+    }
   }
 
   getUserTypeName(id: number) {

@@ -2,7 +2,8 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {User} from '../user.model';
 import {Subscription} from 'rxjs';
 import {UsersService} from '../users.service';
-import {ActivatedRoute, Router} from '@angular/router';
+import {Router} from '@angular/router';
+import {RoleGuardService} from '../../auth/role-guard.service';
 
 @Component({
   selector: 'app-users-list',
@@ -12,16 +13,26 @@ import {ActivatedRoute, Router} from '@angular/router';
 export class UsersListComponent implements OnInit, OnDestroy {
   users: User[];
   subscription: Subscription;
+  role: string;
   constructor(private usersService: UsersService,
-              private router: Router,
-              private route: ActivatedRoute) { }
+              private roleGuardService: RoleGuardService,
+              private router: Router) { }
 
   ngOnInit() {
-    this.subscription = this.usersService.usersChanged
-      .subscribe((users: User[]) => {
-        this.users = users;
+    this.role = this.roleGuardService.token.role;
+    if (this.role === 'admin') {
+      this.subscription = this.usersService.usersChanged
+        .subscribe((users: User[]) => {
+          this.users = users;
         });
-    this.users = this.usersService.getUsers();
+      this.users = this.usersService.getUsers();
+    } else if (this.role === 'user') {
+      this.subscription = this.usersService.loggedInUserChanged
+        .subscribe((users: User[]) => {
+          this.users = users;
+        });
+      this.users = this.usersService.getLoggedInUser();
+    }
   }
 
   ngOnDestroy(): void {

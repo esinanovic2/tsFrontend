@@ -22,6 +22,11 @@ import { GroupComponent } from './groups/group/group.component';
 import {UsersService} from './users/users.service';
 import {RoleGuardService} from './auth/role-guard.service';
 import { DropdownDirective } from './shared/dropdown.directive';
+import { GroupUsersComponent } from './groups/group-users/group-users.component';
+import { GroupUserItemComponent } from './groups/group-users/group-user-item/group-user-item.component';
+import { TripListComponent } from './trips/trip-list/trip-list.component';
+import { TripListItemComponent } from './trips/trip-list/trip-list-item/trip-list-item.component';
+import {HttpModule} from "@angular/http";
 
 @NgModule({
   declarations: [
@@ -40,9 +45,14 @@ import { DropdownDirective } from './shared/dropdown.directive';
     GroupEditComponent,
     GroupComponent,
     DropdownDirective,
+    GroupUsersComponent,
+    GroupUserItemComponent,
+    TripListComponent,
+    TripListItemComponent,
   ],
   imports: [
     BrowserModule,
+    HttpModule,
     ReactiveFormsModule,
     AppRoutingModule,
     FormsModule

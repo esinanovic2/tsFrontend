@@ -1,3 +1,15 @@
-<p>
-  group-item works!
-</p>
+<a style="cursor: pointer"
+   class="list-group-item clearfix">
+  <div class="pull-left">
+    <h4 class="list-group-item-heading">{{group.name }}</h4>
+  </div>
+  <div class="pull-right">
+    <div class="row">
+      <div class="col-xs-12">
+        <button class="btn btn-primary btn-block" type="button" (click)="onUsers()">Users</button>
+        <button class="btn btn-primary btn-block" type="button" [disabled]="role !== 'admin'" (click)="onEdit()">Edit</button>
+        <button class="btn btn-danger btn-block"  type="button" [disabled]="role !== 'admin'" (click)="onDelete()" >Delete</button>
+      </div>
+    </div>
+  </div>
+</a>

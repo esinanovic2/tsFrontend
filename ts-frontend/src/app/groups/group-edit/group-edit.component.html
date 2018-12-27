@@ -1,3 +1,26 @@
-<p>
-  group-edit works!
-</p>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <form [formGroup]="groupForm" (ngSubmit)="onSubmit()">
+
+        <div class="form-group">
+          <label for="groupName">First name</label>
+          <input
+            type="text"
+            id="groupName"
+            formControlName="groupName"
+            class="form-control">
+          <span *ngIf="!groupForm.get('groupName').valid && groupForm.get('groupName').touched"
+                class="help-block" style="color: red">
+            <span *ngIf="groupForm.get('groupName').errors['required']">
+                This field is required</span>
+            <span *ngIf="groupForm.get('groupName').errors['nameMustBeUnique']">
+                Group name must be unique</span>
+          </span>
+        </div>
+
+        <button class="btn btn-primary" type="submit" [disabled]="!groupForm.valid">{{editMode ?  'Update' : 'Add'}}</button>
+      </form>
+    </div>
+  </div>
+</div>

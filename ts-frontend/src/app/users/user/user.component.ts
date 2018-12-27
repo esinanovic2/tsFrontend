@@ -34,4 +34,7 @@ export class UserComponent implements OnInit {
     this.userType = this.typeService.getUserTypeName(this.user.userTypeId);
   }
 
+  onTrips() {
+    this.router.navigate(['trips'], {relativeTo: this.route});
+  }
 }

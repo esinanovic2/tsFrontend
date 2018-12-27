@@ -10,7 +10,7 @@
         <div class="col-xs-12">
           <button class="btn btn-primary btn-block" type="button" (click)="onDetails()">Details</button>
           <button class="btn btn-primary btn-block" type="button" (click)="onEdit()">Edit</button>
-          <button class="btn btn-danger btn-block"  type="button" (click)="onDelete()" >Delete</button>
+          <button class="btn btn-danger btn-block"  type="button" [disabled]="role !== 'admin'" (click)="onDelete()" >Delete</button>
         </div>
       </div>
   </div>

@@ -2,8 +2,9 @@ import {Component, Input, OnInit} from '@angular/core';
 import {User} from '../user.model';
 import {ActivatedRoute, Router} from '@angular/router';
 import {UsersService} from '../users.service';
-import {GroupService} from "../../groups/group.service";
-import {UserTypeService} from "../user-type.service";
+import {GroupService} from '../../groups/group.service';
+import {UserTypeService} from '../user-type.service';
+import {RoleGuardService} from '../../auth/role-guard.service';
 
 
 @Component({
@@ -15,33 +16,33 @@ export class UserItemComponent implements OnInit {
   @Input() user: User;
   @Input() index: number;
 
+  role: string;
   userType: string;
   userGroup: string;
 
   constructor(private usersService: UsersService,
               private groupService: GroupService,
               private typeService: UserTypeService,
+              private roleGuardService: RoleGuardService,
               private route: ActivatedRoute,
               private router: Router) { }
 
   ngOnInit() {
     this.userGroup = this.groupService.getGroupName(this.user.userGroupId);
     this.userType = this.typeService.getUserTypeName(this.user.userTypeId);
+    this.role = this.roleGuardService.token.role;
   }
 
   onEdit() {
-    console.log('On Edit user: ' + this.index);
-    this.router.navigate([this.index, 'edit'], {relativeTo: this.route});
+    this.router.navigate([this.user.id, 'edit'], {relativeTo: this.route});
   }
 
   onDelete() {
-    console.log('On Delete user: ' + this.index);
-    this.usersService.deleteUser(this.index);
+    this.usersService.deleteUser(this.user.id);
     this.router.navigate(['/users']);
   }
 
   onDetails() {
-    console.log('On user details: ' + this.index);
-    this.router.navigate([this.index], {relativeTo: this.route});
+    this.router.navigate([this.user.id], {relativeTo: this.route});
   }
 }

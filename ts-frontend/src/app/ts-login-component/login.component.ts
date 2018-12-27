@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../auth/auth.service';
+import {UsersService} from '../users/users.service';
 
 @Component({
   selector: 'app-ts-login-component',
@@ -9,7 +10,8 @@ import {AuthService} from '../auth/auth.service';
 })
 export class LoginComponent implements OnInit {
   signInForm: FormGroup;
-  constructor(private authService: AuthService) { }
+  constructor(private authService: AuthService,
+              private usersService: UsersService) { }
 
   ngOnInit() {
     this.signInForm = new FormGroup({
@@ -30,6 +32,8 @@ export class LoginComponent implements OnInit {
     }
     return null;
   }
+
+
 
   passwordCheck(control: FormControl): {[s: string]: boolean} {
     if ('validPassword' !== control.value) {
