@@ -1,10 +1,7 @@
 import { Injectable } from '@angular/core';
 import {User} from './user.model';
 import {Subject} from 'rxjs';
-import {Http} from '@angular/http';
-import {map} from 'rxjs/operators';
-import {Response} from '@angular/http';
-
+import {DataStorageService} from '../shared/data-storage.service';
 
 @Injectable()
 export class UsersService {
@@ -28,18 +25,13 @@ export class UsersService {
     new User(1, 'Elvedin', 'Sinanovic', 'elva', '', 'elva@elva.com', 1, 1, 1),
   ];
 
-  constructor(private http: Http) { }
+  constructor() {
+  }
+
+  getUsersApi() {
+  }
 
   getUsers() {
-    const token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJVSUQiOjEsIlVHcm91cCI6IkdydXBhMSIsInVzZXJfbmFtZSI6ImpCYXVlciIsInNjb3BlIjpbIm1vYmlsZSJdLCJVVHlwZSI6IkFETUlOIiwiZXhwIjoxNTQ1OTEzNTA5LCJhdXRob3JpdGllcyI6WyJST0xFX0FETUlOIl0sImp0aSI6IjM4NDNhMTRiLTc0NmEtNDA0Yy04ZDRjLTY5YTFjY2FmMDhmYiIsImNsaWVudF9pZCI6ImNsaWVudCJ9.KumAmrtsVttfpfbsKytt3JLew5AiK3yRHAmXwyJDx--IhehxGduUrqMoPhuwBZJAe3D91ezyuYmjC4-XBLw85H2sKdF6s2s6PF_m4UfJqGS9XwgSuLls2XAx1MgU1--0C0uIQeVOncUjUih8JMRWjs7u9yqVK3j5xGu_EItPAf78bP54fR34qKPxtMX0gaEGQeQz4rwXFf-uiZ7aKRcVSRpVamDVhL5KI79Vgal4ToYGMfZZVpQAjWf6O2pSOyArp0qi-5KfHMCEnXoSV4NpcvyQezNw3cX4gM-GriVaBKTxwWGrFm_A1c2RHwFSjI8QliUGDpd1MtdQCJ6U-EpT1A';
-    const header = new Headers({'Authorization': 'Bearer ' + token});
-    // @ts-ignore
-    this.http.get(this.usersURL, {headers: [header, header]})
-      .subscribe(
-        (response: Response) => {
-          console.log(response);
-        }
-      );
     return this.users.slice();
   }
 
@@ -93,7 +85,12 @@ export class UsersService {
   }
 
   setUsers(users: User[]) {
-    this.users = users;
+    // const tempUsers = this.dataStorageService.getAllUsers();
+    // const tempUsers = this.dataStorageService.getAllUsersClient();
+    console.log('Temp users: ', users);
+    if (users !== null) {
+      this.users = users;
+    }
     this.usersChanged.next(this.users.slice());
   }
 

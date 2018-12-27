@@ -4,6 +4,7 @@ import {Subscription} from 'rxjs';
 import {UsersService} from '../users.service';
 import {Router} from '@angular/router';
 import {RoleGuardService} from '../../auth/role-guard.service';
+import {DataStorageService} from '../../shared/data-storage.service';
 
 @Component({
   selector: 'app-users-list',
@@ -15,6 +16,7 @@ export class UsersListComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   role: string;
   constructor(private usersService: UsersService,
+              private dataStorageService: DataStorageService,
               private roleGuardService: RoleGuardService,
               private router: Router) { }
 

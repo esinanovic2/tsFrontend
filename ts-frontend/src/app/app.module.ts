@@ -26,7 +26,8 @@ import { GroupUsersComponent } from './groups/group-users/group-users.component'
 import { GroupUserItemComponent } from './groups/group-users/group-user-item/group-user-item.component';
 import { TripListComponent } from './trips/trip-list/trip-list.component';
 import { TripListItemComponent } from './trips/trip-list/trip-list-item/trip-list-item.component';
-import {HttpModule} from "@angular/http";
+import {HttpModule} from '@angular/http';
+import {HttpClientModule} from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -53,6 +54,7 @@ import {HttpModule} from "@angular/http";
   imports: [
     BrowserModule,
     HttpModule,
+    HttpClientModule,
     ReactiveFormsModule,
     AppRoutingModule,
     FormsModule
