@@ -16,7 +16,7 @@ export class GroupUserItemComponent implements OnInit {
   constructor(private userTypeService: UserTypeService) { }
 
   ngOnInit() {
-    this.userTypeName = this.userTypeService.getUserTypeName(this.user.userTypeId);
+    this.userTypeName = this.userTypeService.getUserTypeName(this.user.tipKorisnika.id);
   }
 
 }

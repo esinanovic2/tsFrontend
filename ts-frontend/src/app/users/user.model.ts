@@ -1,25 +1,21 @@
+import {GroupModel} from '../groups/group.model';
+import {UserTypeModel} from './user-type.model';
+
 export  class User {
   public id: number;
-  public firstName: string;
-  public lastName: string;
+  public fullName: string;
   public username: string;
-  public password: string;
   public email: string;
-  public userTypeId: number;
-  public userGroupId: number;
-  public deviceId: number;
+  public grupaKorisnika: GroupModel;
+  public tipKorisnika: UserTypeModel;
 
 
-  constructor(id: number, firstName: string, lastName: string, username: string, password: string, email: string,
-              userTypeId: number, userGroupId: number, deviceId: number) {
+  constructor(id: number, fullName: string, username: string, email: string, grupaKorisnika: GroupModel, tipKorisnika: UserTypeModel) {
     this.id = id;
-    this.firstName = firstName;
-    this.lastName = lastName;
+    this.fullName = fullName;
     this.username = username;
-    this.password = password;
     this.email = email;
-    this.userTypeId = userTypeId;
-    this.userGroupId = userGroupId;
-    this.deviceId = deviceId;
+    this.grupaKorisnika = grupaKorisnika;
+    this.tipKorisnika = tipKorisnika;
   }
 }

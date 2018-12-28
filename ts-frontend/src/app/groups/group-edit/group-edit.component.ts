@@ -32,7 +32,7 @@ export class GroupEditComponent implements OnInit {
     let groupName = '';
 
     if (this.editMode) {
-      groupName = this.groupService.getGroup(this.id).name;
+      groupName = this.groupService.getGroup(this.id).groupName;
     }
 
     this.groupForm = new FormGroup({
@@ -44,7 +44,7 @@ export class GroupEditComponent implements OnInit {
     let tempGroup = new GroupModel(null, null);
     if (this.editMode) {
       tempGroup = this.groupService.getGroup(this.id);
-      tempGroup.name = this.groupForm.get('groupName').value;
+      tempGroup.groupName = this.groupForm.get('groupName').value;
       this.groupService.updateGroup(this.id, tempGroup);
     } else {
       tempGroup = new GroupModel(this.groupService.getNextId(), this.groupForm.get('groupName').value);

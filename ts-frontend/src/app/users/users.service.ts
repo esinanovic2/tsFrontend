@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import {User} from './user.model';
 import {Subject} from 'rxjs';
-import {DataStorageService} from '../shared/data-storage.service';
+import {GroupModel} from '../groups/group.model';
+import {UserTypeModel} from './user-type.model';
 
 @Injectable()
 export class UsersService {
@@ -12,17 +13,14 @@ export class UsersService {
   private groupUsers: User[] = [];
 
   private users: User[] = [
-    new User(1, 'Elvedin', 'Sinanovic', 'elva', '', 'elva@elva.com', 1, 1, 1),
-    new User(2, 'Ervin', 'Beus', 'ervin', '', 'ervin@ervin.com', 1, 1, 2),
-    new User(3, 'Ena', 'Muratspahic', 'fly', '', 'ena@ena.com', 1, 1, 3),
-    new User(4, 'Obicni', 'Obicnjak', 'obicni', '', 'obicni@obicni.com', 2, 2, 4),
-    new User(5, 'Obicni2', 'Obicnjak2', 'obicni2', '', 'obicni@obicni.com', 2, 2, 5),
-    new User(6, 'Obicni3', 'Obicnjak3', 'obicni3', '', 'obicni@obicni.com', 2, 3, 6),
-    new User(7, 'Obicni4', 'Obicnjak4', 'obicni4', '', 'obicni@obicni.com', 2, 3, 7),
+    new User(1, 'Elvedin' + ' ' + 'Sinanovic', 'elva',  'elva@elva.com', new GroupModel(1, 'Grupa1'), new UserTypeModel(1, 'ADMIN')),
+    new User(2, 'Ervin' + ' ' + 'Ervin', 'ervin',  'ervin@ervin.com', new GroupModel(1, 'Grupa1'), new UserTypeModel(1, 'ADMIN')),
+    new User(3, 'Ena' + ' ' + 'Muratspahic', 'fly',  'ena@ena.com', new GroupModel(1, 'Grupa1'), new UserTypeModel(1, 'ADMIN')),
+    new User(4, 'Obicni' + ' ' + 'Obicnjak', 'obicni',  'obicni@obicni.com', new GroupModel(2, 'Grupa2'), new UserTypeModel(2, 'USER')),
   ];
 
   private loggedInUser: User[] = [
-    new User(1, 'Elvedin', 'Sinanovic', 'elva', '', 'elva@elva.com', 1, 1, 1),
+    new User(1, 'Elvedin' + ' ' + 'Sinanovic', 'elva',  'elva@elva.com', new GroupModel(1, 'Grupa1'), new UserTypeModel(1, 'ADMIN')),
   ];
 
   constructor() {
@@ -60,7 +58,7 @@ export class UsersService {
   getGroupUsers(gid: number) {
     this.groupUsers = [];
     for (let i = 0; i < this.users.length; i++) {
-      if (this.users[i].userGroupId === gid) {
+      if (this.users[i].grupaKorisnika.id === gid) {
         this.groupUsers.push(this.users[i]);
       }
     }

@@ -1,10 +1,10 @@
 export class GroupModel {
   id: number;
-  name: string;
+  groupName: string;
 
 
-  constructor(id: number, name: string) {
+  constructor(id: number, groupName: string) {
     this.id = id;
-    this.name = name;
+    this.groupName = groupName;
   }
 }

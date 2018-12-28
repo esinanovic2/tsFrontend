@@ -69,13 +69,14 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
     if (this.editMode) {
       const user = this.usersService.getUser(this.id);
-      firstName = user.firstName;
-      lastName = user.lastName;
+      const fullName = user.fullName.split(' ');
+      firstName = fullName[0];
+      lastName = fullName[1];
       username = user.username;
       email = user.email;
-      password = user.password;
-      this.selectedType = this.userTypesService.getUserType(user.userTypeId);
-      this.selectedGroup = this.groupService.getGroup(user.userGroupId);
+      password = '';
+      this.selectedType = this.userTypesService.getUserType(user.tipKorisnika.id);
+      this.selectedGroup = this.groupService.getGroup(user.grupaKorisnika.id);
     }
 
     if (this.editMode && this.role === 'admin') {
@@ -120,26 +121,27 @@ export class RegisterComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     let tempUser = new User(null, null, null,
-      null, null, null, null, null, null);
+      null, null, null);
     if (this.editMode && this.role === 'user') {
       tempUser = this.usersService.getUser(this.id);
-      tempUser.firstName = this.registerForm.get('firstName').value;
-      tempUser.lastName = this.registerForm.get('lastName').value;
+      tempUser.fullName = this.registerForm.get('firstName').value
+        + ' ' + this.registerForm.get('lastName').value;
       tempUser.username = this.registerForm.get('username').value;
-      tempUser.password = this.registerForm.get('password').value;
+      // tempUser.password = this.registerForm.get('password').value; TODO fix password saving
       tempUser.email = this.registerForm.get('email').value;
       this.usersService.updateUser(this.id, tempUser);
     } else if (this.editMode && this.role === 'admin') {
       tempUser = this.usersService.getUser(this.id);
-      tempUser.firstName = this.registerForm.get('firstName').value;
-      tempUser.lastName = this.registerForm.get('lastName').value;
-      tempUser.userTypeId = this.registerForm.get('userTypeId').value.id;
-      tempUser.userGroupId = this.registerForm.get('userGroupId').value.id;
+      tempUser.fullName = this.registerForm.get('firstName').value
+        + ' ' + this.registerForm.get('lastName').value;
+      tempUser.tipKorisnika = this.registerForm.get('userTypeId').value;
+      tempUser.grupaKorisnika = this.registerForm.get('userGroupId').value;
       this.usersService.updateUser(this.id, tempUser);
     } else {
-      tempUser = new User(this.usersService.getNextId(), this.registerForm.get('firstName').value, this.registerForm.get('lastName').value,
-        this.registerForm.get('username').value, this.registerForm.get('password').value, this.registerForm.get('email').value,
-        this.registerForm.get('userTypeId').value.id, this.registerForm.get('userGroupId').value.id, null);
+      tempUser = new User(this.usersService.getNextId(),
+        this.registerForm.get('firstName').value + ' ' + this.registerForm.get('lastName').value,
+        this.registerForm.get('username').value, this.registerForm.get('email').value,
+        this.registerForm.get('userTypeId').value, this.registerForm.get('userGroupId').value);
         this.usersService.addUser(tempUser);
     }
     this.onCancel();

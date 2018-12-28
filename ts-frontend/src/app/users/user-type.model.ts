@@ -1,10 +1,10 @@
 export class UserTypeModel {
   id: number;
-  name: string;
+  typeName: string;
 
 
-  constructor(id: number, name: string) {
+  constructor(id: number, typeName: string) {
     this.id = id;
-    this.name = name;
+    this.typeName = typeName;
   }
 }

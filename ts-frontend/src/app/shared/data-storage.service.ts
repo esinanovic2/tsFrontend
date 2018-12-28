@@ -23,6 +23,7 @@ export class DataStorageService {
   userByUsernameURL = this.hostIp + this.portAndMs + 'users?userName=';
   addUserURL = this.hostIp + this.portAndMs + 'users/add';
   updateUserURL = this.hostIp + this.portAndMs + 'users/update/';
+  adminUpdateUserURL = this.hostIp + this.portAndMs + 'users/admin/update/';
   deleteUserURL = this.hostIp + this.portAndMs + 'users/delete/';
 
   getAllGroupsURL = this.hostIp + this.portAndMs + 'groups/';
@@ -48,7 +49,10 @@ export class DataStorageService {
                password: '1234'};
   dUser = new FormData();
 
-  newUser = new User(null, 'Novi4', 'User4', 'noviusername4',  '12345', 'user@email4.com', 1, 1,    1);
+  grupa1 = new GroupModel(1, 'Grupa1');
+  tip1 = new UserTypeModel(1, 'ADMIN');
+  newUser = new User(null, 'Novi5 ' + 'User5', 'noviusername5',   'user@email5.com', this.grupa1, this.tip1);
+  updatedUser = new User(null, 'Updated4 ' + 'User4', 'updateduser4',   'updated4@email.com', this.grupa1, this.tip1);
 
   constructor(private authService: AuthService,
               private http: Http,
@@ -73,7 +77,16 @@ export class DataStorageService {
     // this.getTypeById(1);
     // this.getTripsByUserId(1);
 
-    this.addUser(this.newUser);
+    // this.addUser(this.newUser);
+    // this.updateUserFromUser(9, this.updatedUser);
+    // this.deleteUser(11);
+    this.getAllGroups();
+    this.getGroupById(1);
+    this.getGroupByName('Grupa1');
+    this.addGroup(new GroupModel(5, 'NewGroup'));
+    this.updateGroup(5,  new GroupModel(5, 'UpdatedGroup'));
+    this.deleteGroup(5);
+
   }
 
   private static createTokenBodyFromStrings(grant_type: string, scope: string, username: string, password: string) {
@@ -87,19 +100,42 @@ export class DataStorageService {
     return formData;
   }
 
-  private createUserBodyFromUser(newUser: User) {
+  private createUserBodyFromUserData(newUser: User, password: string) {
     const formData = new FormData();
-    formData.append('firstName', newUser.firstName);
-    formData.append('lastName', newUser.lastName);
+    const fullName = newUser.fullName.split(' ');
+    formData.append('firstName', fullName[0]);
+    formData.append('lastName', fullName[1]);
     formData.append('userName', newUser.username);
-    formData.append('password', newUser.password);
-    formData.append('userTypeId', newUser.userTypeId + '');
-    formData.append('userGroupId', newUser.userGroupId + '');
-    formData.append('deviceId', newUser.deviceId + '');
+    formData.append('password', password);
+    formData.append('userTypeId', newUser.tipKorisnika.id + '');
+    formData.append('userGroupId', newUser.grupaKorisnika.id + '');
+    formData.append('deviceId', '');
     formData.append('email', newUser.email);
     return formData;
   }
 
+  private createUpdateBodyFromUser(newUser: User, password: string) {
+    const formData = new URLSearchParams();
+    const fullName = newUser.fullName.split(' ');
+    formData.set('firstName', fullName[0]);
+    formData.set('lastName', fullName[1]);
+    formData.set('userName', newUser.username);
+    formData.set('password', password);
+    formData.set('email', newUser.email);
+    return formData;
+  }
+
+  private createUpdateBodyFromAdmin(newUser: User, password: string) {
+    const formData = new URLSearchParams();
+    const fullName = newUser.fullName.split(' ');
+    formData.set('firstName', fullName[0]);
+    formData.set('lastName', fullName[1]);
+    formData.set('userName', newUser.username);
+    formData.set('userTypeId', newUser.tipKorisnika.id + '');
+    formData.set('userGroupId', newUser.grupaKorisnika.id + '');
+    formData.set('email', newUser.email);
+    return formData;
+  }
 
   ////////////// USERS \\\\\\\\\\\\\
 
@@ -196,7 +232,7 @@ export class DataStorageService {
   }
 
   addUser(newUser: User) {
-    const userFormData = this.createUserBodyFromUser(newUser);
+    const userFormData = this.createUserBodyFromUserData(newUser, '1234');
     this.httpClient.post( this.addUserURL, userFormData,
       {
         headers: new HttpHeaders()
@@ -214,12 +250,62 @@ export class DataStorageService {
       );
   }
 
-  updateUser(id: number, newUser: User) {
+  updateUserFromUser(id: number, newUser: User) {
+    const userFormData = this.createUpdateBodyFromUser(newUser, '1234');
+    this.httpClient.put( this.updateUserURL + id, userFormData.toString(),
+      {
+        headers: new HttpHeaders()
+          .set('Authorization', 'Bearer ' + this.token)
+          .append('Access-Control-Allow-Origin', '*')
+          .append('Content-Type', 'application/x-www-form-urlencoded')
+      })
+      .subscribe(
+        (user: User) => {
+          console.log('User updated response', user);
+          // this.usersService.setUsers(users);
+        },
+        (error1 => {
+          console.log('User updated error: ', error1);
+        })
+      );
+  }
 
+  updateUserFromAdmin(id: number, newUser: User) {
+    const userFormData = this.createUpdateBodyFromAdmin(newUser, '1234');
+    this.httpClient.put( this.adminUpdateUserURL + id, userFormData.toString(),
+      {
+        headers: new HttpHeaders()
+          .set('Authorization', 'Bearer ' + this.token)
+          .append('Access-Control-Allow-Origin', '*')
+          .append('Content-Type', 'application/x-www-form-urlencoded')
+      })
+      .subscribe(
+        (user: User) => {
+          console.log('User updated response', user);
+          // this.usersService.setUsers(users);
+        },
+        (error1 => {
+          console.log('User updated error: ', error1);
+        })
+      );
   }
 
   deleteUser(id: number) {
-
+    this.httpClient.delete( this.deleteUserURL + id,
+      {
+        headers: new HttpHeaders()
+          .set('Authorization', 'Bearer ' + this.token)
+          .append('Access-Control-Allow-Origin', '*')
+      })
+      .subscribe(
+        (user: User) => {
+          console.log('User deleted response', user);
+          // this.usersService.setUsers(users);
+        },
+        (error1 => {
+          console.log('User deleted error: ', error1);
+        })
+      );
   }
 
   ////////////// GROUPS \\\\\\\\\\\\\
@@ -279,7 +365,7 @@ export class DataStorageService {
 
   }
 
-  updateGroup(id: number) {
+  updateGroup(id: number, newGroup: GroupModel) {
 
   }
 

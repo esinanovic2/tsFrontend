@@ -21,7 +21,7 @@ export class GroupService {
   private userGroup: GroupModel[] = [];
 
   constructor(private userService: UsersService) {
-    const tempGroup = this.getGroup(userService.getLoggedInUser()[0].userGroupId);
+    const tempGroup = this.getGroup(userService.getLoggedInUser()[0].grupaKorisnika.id);
     this.userGroup.push(tempGroup);
     this.userGroupChanged.next(this.userGroup.slice());
   }
@@ -40,8 +40,8 @@ export class GroupService {
     return this.groups.slice();
   }
 
-  setGroups(userTypes: UserTypeModel[]) {
-    this.groups = userTypes;
+  setGroups(userGroups: GroupModel[]) {
+    this.groups = userGroups;
     this.groupsChanged.next(this.groups.slice());
   }
 
@@ -59,7 +59,7 @@ export class GroupService {
 
   checkGroupNameExists (name: string): boolean {
     for (let i = 0; i < this.groups.length; i++) {
-      if (this.groups[i].name === name) {
+      if (this.groups[i].groupName === name) {
         return true;
       }
     }
@@ -69,7 +69,7 @@ export class GroupService {
   getGroupName(id: number) {
     for (let i = 0; i < this.groups.length; i++) {
       if (this.groups[i].id === id) {
-        return this.groups[i].name;
+        return this.groups[i].groupName;
       }
     }
   }

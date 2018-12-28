@@ -30,8 +30,8 @@ export class UserComponent implements OnInit {
       }
     );
 
-    this.userGroup = this.groupService.getGroupName(this.user.userGroupId);
-    this.userType = this.typeService.getUserTypeName(this.user.userTypeId);
+    this.userGroup = this.user.grupaKorisnika.groupName; // this.groupService.getGroupName(this.user.userGroupId);
+    this.userType = this.user.tipKorisnika.typeName; // this.typeService.getUserTypeName(this.user.userTypeId);
   }
 
   onTrips() {

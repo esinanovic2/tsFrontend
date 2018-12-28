@@ -92,7 +92,7 @@
             id="userTypeId"
             formControlName="userTypeId"
             class="form-control">
-            <option class="form-control" *ngFor="let userTypeEl of userTypes; let i=index" [ngValue]="userTypeEl">{{userTypeEl.name}}</option>
+            <option class="form-control" *ngFor="let userTypeEl of userTypes; let i=index" [ngValue]="userTypeEl">{{userTypeEl.typeName}}</option>
           </select>
         </div>
 
@@ -102,7 +102,7 @@
             id="userGroupId"
             formControlName="userGroupId"
             class="form-control">
-            <option class="form-control" *ngFor="let userGroupEl of userGroups; let i=index" [ngValue]="userGroupEl">{{userGroupEl.name}}</option>
+            <option class="form-control" *ngFor="let userGroupEl of userGroups; let i=index" [ngValue]="userGroupEl">{{userGroupEl.groupName}}</option>
           </select>
         </div>
 
