@@ -85,9 +85,6 @@ export class UsersService {
   }
 
   setUsers(users: User[]) {
-    // const tempUsers = this.dataStorageService.getAllUsers();
-    // const tempUsers = this.dataStorageService.getAllUsersClient();
-    console.log('Temp users: ', users);
     if (users !== null) {
       this.users = users;
     }

@@ -29,12 +29,7 @@ export class AuthService {
   }
 
   getToken() {
-    this.token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJVSUQiOjEsIlVHcm91cCI6IkdydXBhMSIsInVzZXJfbmFtZSI6ImpCYXVlciIsI' +
-      'nNjb3BlIjpbIm1vYmlsZSJdLCJVVHlwZSI6IkFETUlOIiwiZXhwIjoxNTQ1OTY2ODYwLCJhdXRob3JpdGllcyI6WyJST0xFX0FETUlOIl0sImp0aS' +
-      'I6IjQ2MmNlNGIwLTlmOWYtNDJmOS04YjJiLTY1NDkxNTRmNTViNCIsImNsaWVudF9pZCI6ImNsaWVudCJ9.i4EvVDfokHuqgPFtDmwoa-acLwbwYS' +
-      'iIq_Rc-5_duWfUSCcdLw9H17xsjOxhuU061snPfzpvZ9GIbazlLxEl1QQdWaqzvHZdZ28lklqxqKpWRFjgRhPwO9UkOSRHrHy8dTGZz_A9wZkV9Lw' +
-      '5_U7_iEUA3YvdsJpKpO0l3-fcwqV7807GsEwjNwD1OVj4fAE5KueSJFxHYQGpO3_Svh0HAarXhL4uaMet7zIHaisnRMmnSZw-f-XwJ20Io0ktG8Kg' +
-      'hq01Ifdthh0KzyVUzLNZYhtRPesC-8PAFVzkIUfnEXyly9WTDWGVsDG77Rpo5SYQRo60g-IJfZUUxf3Dd6KO7g';
+    this.token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJVSUQiOjEsIlVHcm91cCI6IkdydXBhMSIsInVzZXJfbmFtZSI6ImpCYXVlciIsInNjb3BlIjpbIm1vYmlsZSJdLCJVVHlwZSI6IkFETUlOIiwiZXhwIjoxNTQ2MDQ4MTc2LCJhdXRob3JpdGllcyI6WyJST0xFX0FETUlOIl0sImp0aSI6IjVlMTk2MmI1LTcxMjQtNDA5ZC1iNjExLTAyNWZmOTllNjA0OSIsImNsaWVudF9pZCI6ImNsaWVudCJ9.mwAYNmLigfxX4OvXVHY0Pa7XD5B4yjBGB9GPwag5ifeSLQvZ05m-b2XrkpiTWdoYixdC6IE2Ydksra1Bg7ZOQmW5lQcttCuIUt63tOFDpsYIRfrPQ3a7hCRerWECaofQof86w08zDmRu_6lupBzwutaTSWc0xhRiXACykdUX-zc5KDXtyXXy8Hpwe71BxEc2zl12ieDlp6baV_wA1Q6oVaYx3lFX6o3BwKFZ8t6eLBwHxTwgrYPQP7VHt04ja1WLaZZDyNwHL4bpdZfdfmNb7OoUnwQeuwpyP0pE2OhEJDy4zY_6LecDCcG-M5K5mmnINyhQWdHUHNpHn8x5gLz7Ug';
 
     console.log('Decoded token', this.jwtHelper.decodeToken(this.token));
 
