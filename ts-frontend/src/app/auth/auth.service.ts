@@ -7,36 +7,55 @@ import {JwtHelperService} from '@auth0/angular-jwt';
   providedIn: 'root'
 })
 export class AuthService {
-  private token = '';
-
+  private token = null;
+  private loggedInUserRole = null;
+  private loggedInUserId = null;
   private authToken: TokenModel;
   jwtHelper: JwtHelperService = new JwtHelperService();
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {
+    this.authToken = JSON.parse(localStorage.getItem('authToken'));
+    if (this.authToken !== null) {
+      this.loggedInUserId = this.authToken.UID;
+      this.loggedInUserRole = this.authToken.UType;
+    }
+  }
 
   isAuthenticated() {
-    return this.token !== '';
+    return this.authToken !== null && this.authToken.expires_in > 0;
   }
 
   login() {
-    this.token = 'Authenticated';
+    this.loggedInUserId = this.authToken.UID;
+    this.loggedInUserRole = this.authToken.UType;
+    localStorage.setItem('authToken', JSON.stringify(this.authToken));
     this.router.navigate(['/']);
   }
 
   logout() {
-    this.token = '';
+    this.loggedInUserId = null;
+    this.loggedInUserRole = null;
+    this.authToken.expires_in = 0;
+    this.authToken = null;
+    localStorage.setItem('authToken', JSON.stringify(this.authToken));
+    localStorage.clear();
+    this.token = null;
     this.router.navigate(['/login']);
   }
 
-  getToken() {
-    this.token = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJVSUQiOjEsIlVHcm91cCI6IkdydXBhMSIsInVzZXJfbmFtZSI6ImpCYXVlciIsInNjb3BlIjpbIm1vYmlsZSJdLCJVVHlwZSI6IkFETUlOIiwiZXhwIjoxNTQ2MDY5Mzk1LCJhdXRob3JpdGllcyI6WyJST0xFX0FETUlOIl0sImp0aSI6IjgyMTY3ODQyLWJjNDUtNGFkYy04ZTM4LTMzZWVjYTc2YWQ4OSIsImNsaWVudF9pZCI6ImNsaWVudCJ9.keG9E-Tv5lrFrE_vK81r5SalR8vB8LCtiF9fnVswdLCeZ2thVymw7Gz3h798_r4L9-eA0RRQIhNEy9fUGppWIXyOpbSRGC74gjq3xJatw8wBtBqFJOtRYKLA9TYIcyu_2367OHAw2ShliMcyCDhsd45IzXWFt9SHPodgQcB4n1fAZqC8YwMB8dzEq3K9Zz4tKEkrtcnHmLVFUOW_LpwpWOcEkuSAyGpeXK8Hmt_pYqGRfRiVJKwJzVk8Qqe-T2DJwaLqbOCQ0Pnds0M_dZwNW08bHUPIfNgpMtl9zmbI1cNosFcg_Or4ZbRF28qrmJlvPlYhfwq1G71eWT0HVZazfA';
-
-    console.log('Decoded token', this.jwtHelper.decodeToken(this.token));
-
-    return this.token;
+  getLoggedInUserId() {
+    return this.loggedInUserId;
   }
 
-  private getTokenFromApi() {
+  getLoggedInUserRole() {
+    return this.loggedInUserRole;
+  }
+// TODO remove if unnecessary
+  getToken() {
+    return this.authToken;
+  }
 
+  setToken(newAuthToken: TokenModel) {
+    this.authToken = newAuthToken;
   }
 }

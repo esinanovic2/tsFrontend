@@ -13,9 +13,7 @@
                 class="help-block" style="color: red">
             <span *ngIf="signInForm.get('username').errors['required']">
                 This field is required</span>
-            <span *ngIf="signInForm.get('username').errors['usernameInvalid']">
-                Username Invalid</span>
-            </span>
+          </span>
         </div>
         <div class="form-group">
           <label for="password">Password</label>
@@ -28,10 +26,13 @@
                 class="help-block" style="color: red">
             <span *ngIf="signInForm.get('password').errors['required']">
                 This field is required</span>
-            <span *ngIf="signInForm.get('password').errors['passwordInvalid']">
-                Password Invalid</span>
-            </span>
+          </span>
         </div>
+        <span *ngIf="
+                    apiResponded && !loginSuccess"
+              class="help-block" style="color: red">
+                Username or Password Invalid
+        </span>
         <button class="btn btn-primary" type="submit" [disabled]="!signInForm.valid">Login</button>
       </form>
     </div>

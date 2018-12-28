@@ -16,7 +16,7 @@ import {Trip} from '../trips/trip.model';
 export class DataStorageService {
   hostIp = 'http://192.168.0.17';
   portAndMs = ':8090/korisnici_ms/';
-  loginURL = this.hostIp + this.portAndMs + 'oauth/token';
+
   geAllUsersURL = this.hostIp + this.portAndMs + 'users/';
   usersInGroupURL = this.hostIp + this.portAndMs + 'users/group/';
   userByIdURL = this.hostIp + this.portAndMs + 'users/';
@@ -31,7 +31,7 @@ export class DataStorageService {
   getGroupByIdURL = this.hostIp + this.portAndMs + 'groups/';
   addGroupURL = this.hostIp + this.portAndMs + 'groups/add';
   updateGroupURL = this.hostIp + this.portAndMs + 'groups/update/';
-  deleteGroupURL = this.hostIp + this.portAndMs + 'groups/delete';
+  deleteGroupURL = this.hostIp + this.portAndMs + 'groups/delete/';
 
   getAllTypesURL = this.hostIp + this.portAndMs + 'userTypes/';
   getTypeByIdURL = this.hostIp + this.portAndMs + 'userTypes/';
@@ -42,12 +42,6 @@ export class DataStorageService {
   corsHeader: Headers;
   header: Headers;
   token: string;
-
-  dummyUser = {grant_type: 'password',
-               scope: 'mobile',
-               username: 'jBauer',
-               password: '1234'};
-  dUser = new FormData();
 
   grupa1 = new GroupModel(1, 'Grupa1');
   tip1 = new UserTypeModel(1, 'ADMIN');
@@ -60,11 +54,10 @@ export class DataStorageService {
               private usersService: UsersService
               ) {
     this.tokenHeader = new Headers({'Authorization': 'Basic' + btoa('client: secret')});
-    this.token = authService.getToken();
+    // this.token = authService.getToken();
     this.header = new Headers({'Authorization': 'Bearer ' + this.token});
     this.corsHeader = new Headers({'Access-Control-Allow-Origin': '*'});
-    this.dUser = DataStorageService.createTokenBodyFromStrings(this.dummyUser.grant_type,
-                                                               this.dummyUser.scope, this.dummyUser.username, this.dummyUser.password);
+
     // this.getToken();
     // this.getAllUsersClient();
     // this.getUsersInAGroup(1);
@@ -80,24 +73,17 @@ export class DataStorageService {
     // this.addUser(this.newUser);
     // this.updateUserFromUser(9, this.updatedUser);
     // this.deleteUser(11);
-    this.getAllGroups();
-    this.getGroupById(1);
-    this.getGroupByName('Grupa1');
-    this.addGroup(new GroupModel(5, 'NewGroup'));
-    this.updateGroup(5,  new GroupModel(5, 'UpdatedGroup'));
-    this.deleteGroup(5);
 
-  }
-
-  private static createTokenBodyFromStrings(grant_type: string, scope: string, username: string, password: string) {
-    const formData = new FormData();
-
-    formData.append('grant_type', grant_type);
-    formData.append('scope', scope);
-    formData.append('username', username);
-    formData.append('password', password);
-
-    return formData;
+    // this.getAllGroups();
+    // this.getGroupById(1);
+    // this.getGroupByName('Grupa1');
+    // this.addGroup(new GroupModel(3, 'NewGroup'));
+    // this.addGroup(new GroupModel(4, 'NewNewGroup'));
+    // this.updateGroup(3,  new GroupModel(3, 'UpdatedGroup'));
+    // this.deleteGroup(4);
+    // this.getAllTypes();
+    // this.getTypeById(1);
+    // this.getTripsByUserId(1);
   }
 
   private createUserBodyFromUserData(newUser: User, password: string) {
@@ -139,23 +125,22 @@ export class DataStorageService {
 
   ////////////// USERS \\\\\\\\\\\\\
 
-  getToken() {
-    const credentials = {username: 'client', password: 'secret'};
-    this.httpClient.post<TokenModel>(this.loginURL, this.dUser,
-      {
-        headers: new HttpHeaders()
-          .set('Access-Control-Allow-Origin', '*')
-          .append('Authorization', 'Basic ' + btoa('client:secret'))
-      })
-      .subscribe(
-        (token) => {
-          return console.log('Token response:', token);
-        },
-        (error1 => {
-          console.log('Token error: ', error1);
-        })
-      );
-  }
+  // getToken() {
+  //   this.httpClient.post<TokenModel>(this.loginURL, this.dUser,
+  //     {
+  //       headers: new HttpHeaders()
+  //         .set('Access-Control-Allow-Origin', '*')
+  //         .append('Authorization', 'Basic ' + btoa('client:secret'))
+  //     })
+  //     .subscribe(
+  //       (token) => {
+  //         return console.log('Token response:', token);
+  //       },
+  //       (error1 => {
+  //         console.log('Token error: ', error1);
+  //       })
+  //     );
+  // }
 
   getAllUsersClient() {
     this.httpClient.get<User[]>(this.geAllUsersURL,
@@ -362,15 +347,60 @@ export class DataStorageService {
   }
 
   addGroup(newGroup: GroupModel) {
-
+    const groupFormData = new FormData();
+    groupFormData.append('groupName', newGroup.groupName);
+    this.httpClient.post( this.addGroupURL, groupFormData,
+      {
+        headers: new HttpHeaders()
+          .set('Authorization', 'Bearer ' + this.token)
+          .append('Access-Control-Allow-Origin', '*')
+      })
+      .subscribe(
+        (user: User) => {
+          console.log('Group added response', user);
+          // this.usersService.setUsers(users);
+        },
+        (error1 => {
+          console.log('Group added  error: ', error1);
+        })
+      );
   }
 
   updateGroup(id: number, newGroup: GroupModel) {
-
+    const groupFormData = new URLSearchParams();
+    groupFormData.set('groupName', newGroup.groupName);
+    this.httpClient.put( this.updateGroupURL + id, groupFormData.toString(),
+      {
+        headers: new HttpHeaders()
+          .set('Authorization', 'Bearer ' + this.token)
+          .append('Access-Control-Allow-Origin', '*')
+          .append('Content-Type', 'application/x-www-form-urlencoded')
+      })
+      .subscribe(
+        (user: User) => {
+          console.log('Group updated response', user);
+        },
+        (error1 => {
+          console.log('Group updated error: ', error1);
+        })
+      );
   }
 
   deleteGroup(id: number) {
-
+    this.httpClient.delete( this.deleteGroupURL + id,
+      {
+        headers: new HttpHeaders()
+          .set('Authorization', 'Bearer ' + this.token)
+          .append('Access-Control-Allow-Origin', '*')
+      })
+      .subscribe(
+        (user: User) => {
+          console.log('Group deleted response', user);
+        },
+        (error1 => {
+          console.log('Group deleted error: ', error1);
+        })
+      );
   }
   ////////////// TYPES \\\\\\\\\\\\\
 
@@ -419,10 +449,10 @@ export class DataStorageService {
       })
       .subscribe(
         (trips: Trip[]) => {
-          console.log('All types response', trips);
+          console.log('Trips by user response', trips);
         },
         (error1 => {
-          console.log('All types error: ', error1);
+          console.log('Trips by user error: ', error1);
         })
       );
   }
