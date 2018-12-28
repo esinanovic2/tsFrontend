@@ -16,7 +16,7 @@ import {Trip} from '../trips/trip.model';
 export class DataStorageService {
   hostIp = 'http://192.168.0.17';
   portAndMs = ':8090/korisnici_ms/';
-  loginURL = this.hostIp + this.portAndMs + 'oauth/token/';
+  loginURL = this.hostIp + this.portAndMs + 'oauth/token';
   geAllUsersURL = this.hostIp + this.portAndMs + 'users/';
   usersInGroupURL = this.hostIp + this.portAndMs + 'users/group/';
   userByIdURL = this.hostIp + this.portAndMs + 'users/';
@@ -45,7 +45,10 @@ export class DataStorageService {
   dummyUser = {grant_type: 'password',
                scope: 'mobile',
                username: 'jBauer',
-               password: 1234};
+               password: '1234'};
+  dUser = new FormData();
+
+  newUser = new User(null, 'Novi4', 'User4', 'noviusername4',  '12345', 'user@email4.com', 1, 1,    1);
 
   constructor(private authService: AuthService,
               private http: Http,
@@ -56,27 +59,57 @@ export class DataStorageService {
     this.token = authService.getToken();
     this.header = new Headers({'Authorization': 'Bearer ' + this.token});
     this.corsHeader = new Headers({'Access-Control-Allow-Origin': '*'});
+    this.dUser = DataStorageService.createTokenBodyFromStrings(this.dummyUser.grant_type,
+                                                               this.dummyUser.scope, this.dummyUser.username, this.dummyUser.password);
     // this.getToken();
-    this.getAllUsersClient();
-    this.getUsersInAGroup(1);
-    this.getUserById(1);
-    this.getUserByUsername('jBauer');
-    this.getAllGroups();
-    this.getGroupById(1);
-    this.getGroupByName('Grupa1');
-    this.getAllTypes();
-    this.getTypeById(1);
-    this.getTripsByUserId(1);
+    // this.getAllUsersClient();
+    // this.getUsersInAGroup(1);
+    // this.getUserById(1);
+    // this.getUserByUsername('jBauer');
+    // this.getAllGroups();
+    // this.getGroupById(1);
+    // this.getGroupByName('Grupa1');
+    // this.getAllTypes();
+    // this.getTypeById(1);
+    // this.getTripsByUserId(1);
+
+    this.addUser(this.newUser);
   }
+
+  private static createTokenBodyFromStrings(grant_type: string, scope: string, username: string, password: string) {
+    const formData = new FormData();
+
+    formData.append('grant_type', grant_type);
+    formData.append('scope', scope);
+    formData.append('username', username);
+    formData.append('password', password);
+
+    return formData;
+  }
+
+  private createUserBodyFromUser(newUser: User) {
+    const formData = new FormData();
+    formData.append('firstName', newUser.firstName);
+    formData.append('lastName', newUser.lastName);
+    formData.append('userName', newUser.username);
+    formData.append('password', newUser.password);
+    formData.append('userTypeId', newUser.userTypeId + '');
+    formData.append('userGroupId', newUser.userGroupId + '');
+    formData.append('deviceId', newUser.deviceId + '');
+    formData.append('email', newUser.email);
+    return formData;
+  }
+
 
   ////////////// USERS \\\\\\\\\\\\\
 
   getToken() {
-    this.httpClient.post<TokenModel>(this.loginURL, this.dummyUser,
+    const credentials = {username: 'client', password: 'secret'};
+    this.httpClient.post<TokenModel>(this.loginURL, this.dUser,
       {
         headers: new HttpHeaders()
-          .set('Authorization', 'Basic' + btoa('client:secret'))
-          .append('Authorization', 'Basic' + btoa('client:secret'))
+          .set('Access-Control-Allow-Origin', '*')
+          .append('Authorization', 'Basic ' + btoa('client:secret'))
       })
       .subscribe(
         (token) => {
@@ -92,8 +125,8 @@ export class DataStorageService {
     this.httpClient.get<User[]>(this.geAllUsersURL,
       {
         headers: new HttpHeaders()
-          // .set('Access-Control-Allow-Origin', '*')
-          .set('Authorization', 'Bearer ' + this.token)
+          .set('Access-Control-Allow-Origin', '*')
+          .append('Authorization', 'Bearer ' + this.token)
       })
       .subscribe(
         (users: User[]) => {
@@ -112,8 +145,8 @@ export class DataStorageService {
     this.httpClient.get<User[]>(this.usersInGroupURL + gid,
       {
         headers: new HttpHeaders()
-          // .set('Access-Control-Allow-Origin', '*')
-          .set('Authorization', 'Bearer ' + this.token)
+          .set('Access-Control-Allow-Origin', '*')
+          .append('Authorization', 'Bearer ' + this.token)
       })
       .subscribe(
         (users: User[]) => {
@@ -130,8 +163,8 @@ export class DataStorageService {
     this.httpClient.get<User>( this.userByIdURL + id,
       {
         headers: new HttpHeaders()
-        // .set('Access-Control-Allow-Origin', '*')
-          .set('Authorization', 'Bearer ' + this.token)
+        .set('Access-Control-Allow-Origin', '*')
+          .append('Authorization', 'Bearer ' + this.token)
       })
       .subscribe(
         (user: User) => {
@@ -148,8 +181,8 @@ export class DataStorageService {
     this.httpClient.get<User>(this.userByUsernameURL + username,
       {
         headers: new HttpHeaders()
-        // .set('Access-Control-Allow-Origin', '*')
-          .set('Authorization', 'Bearer ' + this.token)
+        .set('Access-Control-Allow-Origin', '*')
+          .append('Authorization', 'Bearer ' + this.token)
       })
       .subscribe(
         (user: User) => {
@@ -163,7 +196,22 @@ export class DataStorageService {
   }
 
   addUser(newUser: User) {
-
+    const userFormData = this.createUserBodyFromUser(newUser);
+    this.httpClient.post( this.addUserURL, userFormData,
+      {
+        headers: new HttpHeaders()
+          .set('Authorization', 'Bearer ' + this.token)
+          .append('Access-Control-Allow-Origin', '*')
+      })
+      .subscribe(
+        (user: User) => {
+          console.log('User added response', user);
+          // this.usersService.setUsers(users);
+        },
+        (error1 => {
+          console.log('User added  error: ', error1);
+        })
+      );
   }
 
   updateUser(id: number, newUser: User) {
@@ -180,8 +228,8 @@ export class DataStorageService {
     this.httpClient.get<GroupModel[]>(this.getAllGroupsURL,
       {
         headers: new HttpHeaders()
-        // .set('Access-Control-Allow-Origin', '*')
           .set('Authorization', 'Bearer ' + this.token)
+          .append('Access-Control-Allow-Origin', '*')
       })
       .subscribe(
         (groups: GroupModel[]) => {
@@ -197,8 +245,8 @@ export class DataStorageService {
     this.httpClient.get<GroupModel>(this.getGroupByIdURL + id,
       {
         headers: new HttpHeaders()
-        // .set('Access-Control-Allow-Origin', '*')
           .set('Authorization', 'Bearer ' + this.token)
+          .append('Access-Control-Allow-Origin', '*')
       })
       .subscribe(
         (group: GroupModel) => {
@@ -214,8 +262,8 @@ export class DataStorageService {
     this.httpClient.get<GroupModel>(this.getGroupByNameURL + name,
       {
         headers: new HttpHeaders()
-        // .set('Access-Control-Allow-Origin', '*')
           .set('Authorization', 'Bearer ' + this.token)
+          .append('Access-Control-Allow-Origin', '*')
       })
       .subscribe(
         (group: GroupModel) => {
@@ -244,8 +292,8 @@ export class DataStorageService {
     this.httpClient.get<UserTypeModel[]>(this.getAllTypesURL,
       {
         headers: new HttpHeaders()
-        // .set('Access-Control-Allow-Origin', '*')
           .set('Authorization', 'Bearer ' + this.token)
+          .append('Access-Control-Allow-Origin', '*')
       })
       .subscribe(
         (types: UserTypeModel[]) => {
@@ -261,8 +309,8 @@ export class DataStorageService {
     this.httpClient.get<UserTypeModel>(this.getTypeByIdURL + id,
       {
         headers: new HttpHeaders()
-        // .set('Access-Control-Allow-Origin', '*')
           .set('Authorization', 'Bearer ' + this.token)
+          .append('Access-Control-Allow-Origin', '*')
       })
       .subscribe(
         (type: UserTypeModel) => {
@@ -280,8 +328,8 @@ export class DataStorageService {
     this.httpClient.get<Trip[]>(this.getAllTripsByUserURL + id,
       {
         headers: new HttpHeaders()
-        // .set('Access-Control-Allow-Origin', '*')
           .set('Authorization', 'Bearer ' + this.token)
+          .append('Access-Control-Allow-Origin', '*')
       })
       .subscribe(
         (trips: Trip[]) => {
