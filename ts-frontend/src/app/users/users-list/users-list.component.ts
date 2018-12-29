@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component, DoCheck, OnDestroy, OnInit} from '@angular/core';
 import {User} from '../user.model';
 import {Subscription} from 'rxjs';
 import {UsersService} from '../users.service';
@@ -23,16 +23,17 @@ export class UsersListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.role = this.roleGuardService.token.role;
     if (this.role === 'admin') {
+      this.usersService.getUsers();
       this.subscription = this.usersService.usersChanged
         .subscribe((users: User[]) => {
           this.users = users;
         });
-      this.users = this.usersService.getUsers();
     } else if (this.role === 'user') {
       this.subscription = this.usersService.loggedInUserChanged
         .subscribe((users: User[]) => {
           this.users = users;
         });
+      this.usersService.setLoggedInUser();
       this.users = this.usersService.getLoggedInUser();
     }
   }

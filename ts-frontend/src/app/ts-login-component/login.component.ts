@@ -15,7 +15,7 @@ export class LoginComponent implements OnInit {
   private apiResponded = false;
   private loginSuccess = false;
   signInForm: FormGroup;
-  loginURL = this.dataStorageService.hostIp + this.dataStorageService.portAndMs + 'oauth/token';
+  loginURL = DataStorageService.hostIp + DataStorageService.portAndMs + 'oauth/token';
   dUser = new FormData();
 // TODO Remove console logs
   dummyUser = {grant_type: 'password',

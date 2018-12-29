@@ -18,8 +18,6 @@ export class RoleGuardService implements CanActivate {
 
     const lInUserRole = this.authService.getLoggedInUserRole().toLowerCase();
     this.token = {'role': lInUserRole};
-    console.log(this.token.role);
-    console.log(expectedRole[0] + '  -  ' + expectedRole[1]);
 
     if (this.authService.isAuthenticated() && (this.token.role === expectedRole[0] || this.token.role === expectedRole[1])) {
       return true;

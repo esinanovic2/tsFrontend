@@ -26,7 +26,7 @@ export class UserComponent implements OnInit {
       (params: Params) => {
         console.log('User component on init subscribe');
         this.id = +params['id'];
-        this.user = this.usersService.getUser(this.id);
+        this.user = this.usersService.getLocalUser(this.id);
       }
     );
 

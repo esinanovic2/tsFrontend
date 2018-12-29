@@ -34,6 +34,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
               private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.groupService.setGroups();
     this.subscription = this.userTypesService.usersChanged
       .subscribe((userTypes: UserTypeModel[]) => {
         this.userTypes = userTypes;
@@ -68,7 +69,22 @@ export class RegisterComponent implements OnInit, OnDestroy {
     let password = '';
 
     if (this.editMode) {
-      const user = this.usersService.getUser(this.id);
+      this.usersService.getUser(this.id);
+      // this.subscription = this.usersService.tempUserChanged.subscribe((user: User) => {
+      //   if (user === null) {
+      //     alert('User can\'t be edited at the moment');
+      //     this.router.navigate(['/users']);
+      //   }
+      //   const fullName = user.fullName.split(' ');
+      //   firstName = fullName[0];
+      //   lastName = fullName[1];
+      //   username = user.username;
+      //   email = user.email;
+      //   password = '';
+      //   this.selectedType = this.userTypesService.getUserType(user.tipKorisnika.id);
+      //   this.selectedGroup = this.groupService.getGroup(user.grupaKorisnika.id);
+      // });
+      const user = this.usersService.getLocalUser(this.id);
       const fullName = user.fullName.split(' ');
       firstName = fullName[0];
       lastName = fullName[1];
@@ -120,35 +136,62 @@ export class RegisterComponent implements OnInit, OnDestroy {
   }
 
   onSubmit() {
-    let tempUser = new User(null, null, null,
-      null, null, null);
     if (this.editMode && this.role === 'user') {
-      tempUser = this.usersService.getUser(this.id);
+      // this.usersService.getUser(this.id);
+      // this.subscription = this.usersService.tempUserChanged.subscribe((tempUser: User) => {
+      //   if (tempUser === null) {
+      //     alert('User can\'t be edited at the moment');
+      //     return;
+      //   }
+      //   tempUser.fullName = this.registerForm.get('firstName').value
+      //     + ' ' + this.registerForm.get('lastName').value;
+      //   tempUser.username = this.registerForm.get('username').value;
+      //   tempUser.email = this.registerForm.get('email').value;
+      //   this.usersService.updateUserFromUser(this.id, tempUser, this.registerForm.get('password').value);
+      // });
+
+      const tempUser = this.usersService.getLocalUser(this.id);
+
       tempUser.fullName = this.registerForm.get('firstName').value
         + ' ' + this.registerForm.get('lastName').value;
       tempUser.username = this.registerForm.get('username').value;
-      // tempUser.password = this.registerForm.get('password').value; TODO fix password saving
       tempUser.email = this.registerForm.get('email').value;
-      this.usersService.updateUser(this.id, tempUser);
+      this.usersService.updateUserFromUser(this.id, tempUser, this.registerForm.get('password').value);
+
     } else if (this.editMode && this.role === 'admin') {
-      tempUser = this.usersService.getUser(this.id);
+      // this.usersService.getUser(this.id);
+      // this.subscription = this.usersService.tempUserChanged.subscribe((tempUser: User) => {
+      //   if (tempUser === null) {
+      //     alert('User can\'t be edited at the moment');
+      //     return;
+      //   }
+      //   tempUser.fullName = this.registerForm.get('firstName').value
+      //     + ' ' + this.registerForm.get('lastName').value;
+      //   tempUser.tipKorisnika = this.registerForm.get('userTypeId').value;
+      //   tempUser.grupaKorisnika = this.registerForm.get('userGroupId').value;
+      //   this.usersService.updateUserFromAdmin(this.id, tempUser, this.registerForm.get('password').value);
+      // });
+      const tempUser = this.usersService.getLocalUser(this.id);
+
       tempUser.fullName = this.registerForm.get('firstName').value
         + ' ' + this.registerForm.get('lastName').value;
       tempUser.tipKorisnika = this.registerForm.get('userTypeId').value;
       tempUser.grupaKorisnika = this.registerForm.get('userGroupId').value;
-      this.usersService.updateUser(this.id, tempUser);
+      this.usersService.updateUserFromAdmin(this.id, tempUser, '');
+
     } else {
-      tempUser = new User(this.usersService.getNextId(),
+      const tempUser = new User(null,
         this.registerForm.get('firstName').value + ' ' + this.registerForm.get('lastName').value,
         this.registerForm.get('username').value, this.registerForm.get('email').value,
         this.registerForm.get('userTypeId').value, this.registerForm.get('userGroupId').value);
-        this.usersService.addUser(tempUser);
+        this.usersService.addUserApi(tempUser, this.registerForm.get('password').value);
     }
     this.onCancel();
   }
 
   onCancel() {
     this.router.navigate(['/users']);
+    location.reload();
   }
 
   uniqueUserName(control: FormControl): {[s: string]: boolean} {

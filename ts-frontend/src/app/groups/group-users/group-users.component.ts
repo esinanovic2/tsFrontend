@@ -26,6 +26,8 @@ export class GroupUsersComponent implements OnInit, OnDestroy {
         }
       );
 
+    this.usersService.setGroupUsers(this.gid);
+
     this.subscription = this.usersService.groupUsersChanged
       .subscribe((users: User[]) => {
         this.users = users;

@@ -54,7 +54,6 @@ export class GroupEditComponent implements OnInit {
   }
 
   differentGroupName(control: FormControl): {[s: string]: boolean} {
-    console.log('Diff valid: index of: ' + this.groupService.getGroups().indexOf(control.value));
     if (this.groupService.checkGroupNameExists(control.value)) {
       return {'nameMustBeUnique': true};
     }

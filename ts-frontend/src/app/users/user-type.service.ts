@@ -10,8 +10,8 @@ export class UserTypeService {
   usersChanged = new Subject<UserTypeModel[]>();
 
   private userTypes: UserTypeModel[] = [
-    new UserTypeModel(1, 'Administrator'),
-    new UserTypeModel(2, 'Obicni'),
+    new UserTypeModel(1, 'ADMIN'),
+    new UserTypeModel(2, 'USER'),
   ];
 
   constructor() { }
