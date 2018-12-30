@@ -53,7 +53,9 @@ export class DataStorageService {
     // this.getTripsByUserId(1);
   }
   public static portAndMs = ':8090/korisnici_ms/';
-  public static hostIp = 'http://192.168.0.17';
+  public static portAndTripsService = ':8090/putovanja/trip/';
+
+  public static hostIp = 'https://192.168.0.23';
   getAllTypesURL = DataStorageService.hostIp + DataStorageService.portAndMs + 'userTypes/';
   getTypeByIdURL = DataStorageService.hostIp + DataStorageService.portAndMs + 'userTypes/';
 

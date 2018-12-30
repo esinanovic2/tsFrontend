@@ -51,8 +51,9 @@ export class UsersService {
   setLoggedInUser() {
     this.getUserById(this.authService.getLoggedInUserId());
     this.tempUserChanged.subscribe((user: User) => {
-      this.loggedInUser[0] = user;
-      this.loggedInUserChanged.next(this.loggedInUser.slice());
+      this.users = [];
+      this.users [0] = user;
+      this.usersChanged.next(this.users.slice());
     });
   }
 
@@ -111,6 +112,17 @@ export class UsersService {
         return this.users[i];
       }
     }
+/*    if (this.authService.getLoggedInUserRole() === 'USER') {
+      this.users = this.loggedInUser;
+      console.log('LOCAL USERS', this.users);
+      return this.loggedInUser[0];
+    } else {
+      for (let i = 0; i < this.users.length; i++) {
+        if (this.users[i].id === id) {
+          return this.users[i];
+        }
+      }
+    }*/
   }
 
   getUser(id: number) {
@@ -245,7 +257,7 @@ export class UsersService {
 
   updateUserFromUser(id: number, newUser: User, password: string) {
     const userFormData = this.createUpdateBodyFromUser(newUser, password);
-    this.httpClient.put( this.updateUserURL + id, userFormData.toString(),
+    this.httpClient.post( this.updateUserURL + id, userFormData.toString(),
       {
         headers: new HttpHeaders()
           .set('Authorization', 'Bearer ' + this.authService.getToken().access_token)
@@ -267,7 +279,7 @@ export class UsersService {
 
   updateUserFromAdmin(id: number, newUser: User, password: string) {
     const userFormData = this.createUpdateBodyFromAdmin(newUser, password);
-    this.httpClient.put( this.adminUpdateUserURL + id, userFormData.toString(),
+    this.httpClient.post( this.adminUpdateUserURL + id, userFormData.toString(),
       {
         headers: new HttpHeaders()
           .set('Authorization', 'Bearer ' + this.authService.getToken().access_token)
@@ -325,7 +337,7 @@ export class UsersService {
     const fullName = newUser.fullName.split(' ');
     formData.set('firstName', fullName[0]);
     formData.set('lastName', fullName[1]);
-    formData.set('userName', newUser.username);
+    formData.set('username', newUser.username);
     formData.set('password', password);
     formData.set('email', newUser.email);
     return formData;
